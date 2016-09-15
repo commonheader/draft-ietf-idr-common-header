@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc category="std" docName="draft-hares-idr-common-header-00" ipr="trust200902">
+  <front>
+    <title abbrev="Common Header">BGP Community Common Header Attribute</title>
+
+    <author fullname="Sue Hares" initials="S." surname="Hares" role="editor">
+        <organization>Huawei</organization>
+        <address>
+            <email>shares@ndzh.com</email>
+        </address>
+    </author>
+
+    <author fullname="John Scudder" initials="J." surname="Scudder" role="editor">
+        <organization>Juniper Networks</organization>
+        <address>
+            <email>jgs@juniper.net</email>
+        </address>
+    </author>
+
+    <date month="September" year="2016" />
+    <area>Routing</area>
+    <workgroup>IDR</workgroup>
+    <keyword>BGP</keyword>
+    <keyword>communities</keyword>
+
+    <abstract>
+      <t>
+          The original BGP community attribute as defined by <xref target="RFC1997"/>
+          has enjoyed widespread usage. As BGP has evolved, the need for
+          several different styles of communities (or "route colors") emerged.
+          This document defines a new BGP attribute that can aggregates all new
+          styles of communities behind a single BGP Path attribute. The
+          community styles contained by this attribute are to be defined in
+          separate documents.
+      </t>
+    </abstract>
+
+    <note title="Requirements Language">
+        <t>
+            The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+            "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in
+            this document are to be interpreted as described in <xref target="RFC2119"/>.
+        </t>
+    </note>
+
+  </front>
+
+  <middle>
+    <section title="Introduction">
+        <t>
+            As BGP has evolved, various use cases have presented themselves for
+            various flavors of coloring routes. This document defines a new BGP
+            attribute that can aggregate all the new styles of route coloring.
+            The community styles contained by this attribute are to be defined
+            in separate documents.
+        </t>
+    </section>
+
+    <section title="BGP Common Community Header Attribute">
+        <t>
+            This document defines a new BGP Path Attribute, the BGP Common
+            Community Header Attribute. The attribute type code is (TBA by
+            IANA).
+        </t>
+
+        <t>
+            The BGP Common Community Header Attribute is an optional,
+            transitive BGP attribute, and may be present only once in the BGP
+            UPDATE message.
+        </t>
+
+        <t>
+            The attribute is followed by a number of typed communities. Any
+            given community type may appear multiple times.
+        </t>
+
+       <section title="BGP Community Common Header">
+
+      <t>Communities always start with the following header:
+<figure align="center"><artwork><![CDATA[
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            Type               |          Length               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                       Global Administrator                    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+]]></artwork></figure></t>
+      <t>The fields are as shown below:
+      <list style='hanging' hangIndent='10'>
+          <t hangText='     Type -'>
+              The type of community following the header. The types are to be
+              defined in companion documents. This is a two octet field.
+          </t>
+          <t hangText='     Length -'>
+              The number of octets occupied by this header and the communities
+              under it. This is a two octet field.
+          </t>
+          <t hangText='     Global Administrator -'>
+              This sub-field contains a 4-octet Autonomous System number
+              assigned by IANA.
+          </t>
+       </list></t>
+       <t>
+           A BGP speaker that does not recognize a community type SHOULD ignore
+           it, but propagate it to other speakers. This behavior MAY be
+           overridden by local policy.
+       </t>
+    </section>
+    </section>
+
+    <section title="Error Handling">
+        <t>
+            An implementation should walk all Common Headers and verify that
+            all of the communities fill up the path attribute length. If this
+            is not the case, the update message should be treated as withdrawn.
+            Further procedures are described in <xref target="RFC7606"/>.
+        </t>
+    </section>
+
+    <section title="Security Considerations">
+        <t>
+            Optional transitive transitive BGP attributes could unintentionally
+            spread far from their origin. XX insert further deployment.
+        </t>
+    </section>
+
+<section title="Implementation status - RFC EDITOR: REMOVE BEFORE PUBLICATION">
+       <t>
+           This section records the status of known implementations of the
+           protocol defined by this specification at the time of posting of
+           this Internet-Draft, and is based on a proposal described in
+           <xref target="RFC7942" />. The description of implementations in this
+           section is intended to assist the IETF in its decision processes in
+           progressing drafts to RFCs.  Please note that the listing of any
+           individual implementation here does not imply endorsement by the
+           IETF.  Furthermore, no effort has been spent to verify the
+           information presented here that was supplied by IETF contributors.
+           This is not intended as, and must not be construed to be, a catalog
+           of available implementations or their features.  Readers are advised
+           to note that other implementations may exist.
+       </t>
+       <t>
+           As of today these vendors have produced an implementation of Large
+           BGP Community:
+           <list style="symbols">
+               <t>no known implementations</t>
+            </list>
+       </t>
+   </section>
+
+    <section title="IANA Considerations">
+        <t>
+            IANA is requested to assign a BPG path attribute code for the BGP
+            Community Common Header Attribute.
+        </t>
+        <t>
+            IANA is requested to create and maintain a registry of community
+            types for the Type field.
+        </t>
+        <t>
+            <figure><artwork>
+Name                             Type Value
+----                             ----------
+Reserved                         0x0000
+IETF Consensus                   0x0001-0x0555
+First come First served          0x0556-0x0AAA
+Experimental use                 0x0AAB-0x0FFF
+Reserved                         0xF000-0xFFFF
+</artwork></figure>
+        </t>
+
+    </section>
+
+    <section title="Acknowledgements">
+        <t>
+            This document represents a long journey in which many people were
+            instrumental in resolving various prisoner dilemmas. 
+        </t>
+        <t>
+            Robert Raszuk, Jeff Haas, Jakob Heitz, Keyur Patel, Jared Mauch,
+            Andrew Lange, Shane Amante, Bruno Decraene, Paul Jakma, Richard A.
+            Steenbergen, Shintaro Kojima, Juan Alcaide, Burjiz Pithawala, Saku
+            Ytti, Igor Gashinsky and Job Snijders.
+        </t>
+    </section>
+
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include="reference.RFC.1997"?>
+      <?rfc include="reference.RFC.2119"?>
+      <?rfc include="reference.RFC.7606"?>
+      <?rfc include="reference.RFC.7942"?>
+    </references>
+
+  </back>
+</rfc>

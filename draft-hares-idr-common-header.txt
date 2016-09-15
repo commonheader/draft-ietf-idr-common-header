@@ -1,0 +1,280 @@
+
+
+
+
+IDR                                                        S. Hares, Ed.
+Internet-Draft                                                    Huawei
+Intended status: Standards Track                         J. Scudder, Ed.
+Expires: March 19, 2017                                 Juniper Networks
+                                                      September 15, 2016
+
+
+                 BGP Community Common Header Attribute
+                    draft-hares-idr-common-header-00
+
+Abstract
+
+   The original BGP community attribute as defined by [RFC1997] has
+   enjoyed widespread usage.  As BGP has evolved, the need for several
+   different styles of communities (or "route colors") emerged.  This
+   document defines a new BGP attribute that can aggregates all new
+   styles of communities behind a single BGP Path attribute.  The
+   community styles contained by this attribute are to be defined in
+   separate documents.
+
+Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on March 19, 2017.
+
+Copyright Notice
+
+   Copyright (c) 2016 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+
+
+
+Hares & Scudder          Expires March 19, 2017                 [Page 1]
+
+Internet-Draft                Common Header               September 2016
+
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  BGP Common Community Header Attribute . . . . . . . . . . . .   2
+     2.1.  BGP Community Common Header . . . . . . . . . . . . . . .   3
+   3.  Error Handling  . . . . . . . . . . . . . . . . . . . . . . .   3
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   3
+   5.  Implementation status - RFC EDITOR: REMOVE BEFORE PUBLICATION   3
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
+   7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   4
+   8.  Normative References  . . . . . . . . . . . . . . . . . . . .   4
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   5
+
+1.  Introduction
+
+   As BGP has evolved, various use cases have presented themselves for
+   various flavors of coloring routes.  This document defines a new BGP
+   attribute that can aggregate all the new styles of route coloring.
+   The community styles contained by this attribute are to be defined in
+   separate documents.
+
+2.  BGP Common Community Header Attribute
+
+   This document defines a new BGP Path Attribute, the BGP Common
+   Community Header Attribute.  The attribute type code is (TBA by
+   IANA).
+
+   The BGP Common Community Header Attribute is an optional, transitive
+   BGP attribute, and may be present only once in the BGP UPDATE
+   message.
+
+   The attribute is followed by a number of typed communities.  Any
+   given community type may appear multiple times.
+
+
+
+
+
+
+
+
+Hares & Scudder          Expires March 19, 2017                 [Page 2]
+
+Internet-Draft                Common Header               September 2016
+
+
+2.1.  BGP Community Common Header
+
+   Communities always start with the following header:
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |            Type               |          Length               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                       Global Administrator                    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+   The fields are as shown below:
+
+        Type -  The type of community following the header.  The types
+             are to be defined in companion documents.  This is a two
+             octet field.
+
+        Length -  The number of octets occupied by this header and the
+             communities under it.  This is a two octet field.
+
+        Global Administrator -  This sub-field contains a 4-octet
+             Autonomous System number assigned by IANA.
+
+   A BGP speaker that does not recognize a community type SHOULD ignore
+   it, but propagate it to other speakers.  This behavior MAY be
+   overridden by local policy.
+
+3.  Error Handling
+
+   An implementation should walk all Common Headers and verify that all
+   of the communities fill up the path attribute length.  If this is not
+   the case, the update message should be treated as withdrawn.  Further
+   procedures are described in [RFC7606].
+
+4.  Security Considerations
+
+   Optional transitive transitive BGP attributes could unintentionally
+   spread far from their origin.  XX insert further deployment.
+
+5.  Implementation status - RFC EDITOR: REMOVE BEFORE PUBLICATION
+
+   This section records the status of known implementations of the
+   protocol defined by this specification at the time of posting of this
+   Internet-Draft, and is based on a proposal described in [RFC7942].
+   The description of implementations in this section is intended to
+   assist the IETF in its decision processes in progressing drafts to
+   RFCs.  Please note that the listing of any individual implementation
+
+
+
+Hares & Scudder          Expires March 19, 2017                 [Page 3]
+
+Internet-Draft                Common Header               September 2016
+
+
+   here does not imply endorsement by the IETF.  Furthermore, no effort
+   has been spent to verify the information presented here that was
+   supplied by IETF contributors.  This is not intended as, and must not
+   be construed to be, a catalog of available implementations or their
+   features.  Readers are advised to note that other implementations may
+   exist.
+
+   As of today these vendors have produced an implementation of Large
+   BGP Community:
+
+   o  no known implementations
+
+6.  IANA Considerations
+
+   IANA is requested to assign a BPG path attribute code for the BGP
+   Community Common Header Attribute.
+
+   IANA is requested to create and maintain a registry of community
+   types for the Type field.
+
+   Name                             Type Value
+   ----                             ----------
+   Reserved                         0x0000
+   IETF Consensus                   0x0001-0x0555
+   First come First served          0x0556-0x0AAA
+   Experimental use                 0x0AAB-0x0FFF
+   Reserved                         0xF000-0xFFFF
+
+7.  Acknowledgements
+
+   This document represents a long journey in which many people were
+   instrumental in resolving various prisoner dilemmas.
+
+   Robert Raszuk, Jeff Haas, Jakob Heitz, Keyur Patel, Jared Mauch,
+   Andrew Lange, Shane Amante, Bruno Decraene, Paul Jakma, Richard A.
+   Steenbergen, Shintaro Kojima, Juan Alcaide, Burjiz Pithawala, Saku
+   Ytti, Igor Gashinsky and Job Snijders.
+
+8.  Normative References
+
+   [RFC1997]  Chandra, R., Traina, P., and T. Li, "BGP Communities
+              Attribute", RFC 1997, DOI 10.17487/RFC1997, August 1996,
+              <http://www.rfc-editor.org/info/rfc1997>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <http://www.rfc-editor.org/info/rfc2119>.
+
+
+
+Hares & Scudder          Expires March 19, 2017                 [Page 4]
+
+Internet-Draft                Common Header               September 2016
+
+
+   [RFC7606]  Chen, E., Ed., Scudder, J., Ed., Mohapatra, P., and K.
+              Patel, "Revised Error Handling for BGP UPDATE Messages",
+              RFC 7606, DOI 10.17487/RFC7606, August 2015,
+              <http://www.rfc-editor.org/info/rfc7606>.
+
+   [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
+              Code: The Implementation Status Section", BCP 205,
+              RFC 7942, DOI 10.17487/RFC7942, July 2016,
+              <http://www.rfc-editor.org/info/rfc7942>.
+
+Authors' Addresses
+
+   Sue Hares (editor)
+   Huawei
+
+   Email: shares@ndzh.com
+
+
+   John Scudder (editor)
+   Juniper Networks
+
+   Email: jgs@juniper.net
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Hares & Scudder          Expires March 19, 2017                 [Page 5]
