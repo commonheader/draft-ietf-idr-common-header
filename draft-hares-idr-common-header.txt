@@ -5,8 +5,8 @@
 IDR                                                        S. Hares, Ed.
 Internet-Draft                                                    Huawei
 Intended status: Standards Track                         J. Scudder, Ed.
-Expires: March 19, 2017                                 Juniper Networks
-                                                      September 15, 2016
+Expires: March 20, 2017                                 Juniper Networks
+                                                      September 16, 2016
 
 
                  BGP Community Common Header Attribute
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 19, 2017.
+   This Internet-Draft will expire on March 20, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Hares & Scudder          Expires March 19, 2017                 [Page 1]
+Hares & Scudder          Expires March 20, 2017                 [Page 1]
 
 Internet-Draft                Common Header               September 2016
 
@@ -96,8 +96,9 @@ Table of Contents
    IANA).
 
    The BGP Common Community Header Attribute is an optional, transitive
-   BGP attribute, and may be present only once in the BGP UPDATE
-   message.
+   BGP attribute.  The attribute may be present multiple times in a BGP
+   UPDATE message with the unique constraint of the tuple (type, global
+   administrator).
 
    The attribute is followed by a number of typed communities.  Any
    given community type may appear multiple times.
@@ -108,8 +109,7 @@ Table of Contents
 
 
 
-
-Hares & Scudder          Expires March 19, 2017                 [Page 2]
+Hares & Scudder          Expires March 20, 2017                 [Page 2]
 
 Internet-Draft                Common Header               September 2016
 
@@ -165,7 +165,7 @@ Internet-Draft                Common Header               September 2016
 
 
 
-Hares & Scudder          Expires March 19, 2017                 [Page 3]
+Hares & Scudder          Expires March 20, 2017                 [Page 3]
 
 Internet-Draft                Common Header               September 2016
 
@@ -180,7 +180,7 @@ Internet-Draft                Common Header               September 2016
    As of today these vendors have produced an implementation of Large
    BGP Community:
 
-   o  no known implementations
+   o  ExaBGP
 
 6.  IANA Considerations
 
@@ -190,13 +190,15 @@ Internet-Draft                Common Header               September 2016
    IANA is requested to create and maintain a registry of community
    types for the Type field.
 
-   Name                             Type Value
-   ----                             ----------
-   Reserved                         0x0000
-   IETF Consensus                   0x0001-0x0555
-   First come First served          0x0556-0x0AAA
-   Experimental use                 0x0AAB-0x0FFF
-   Reserved                         0x1000-0xFFFF
+   Name                       Type Value      Transitivity
+   ----                       ----------      ------------
+   Reserved                   0x0000          n/a
+   IETF Consensus             0x0001-0x02AA   Transitive
+   IETF Consensus             0x02AB-0x0555   Non-Transitive
+   First come First served    0x0556-0x07FF   Transitive
+   First come First served    0x0800-0x0AAA   Non-Transitive
+   Experimental use           0x0AAB-0x0FFF   Non-Transitive
+   Reserved                   0x1000-0xFFFF   n/a
 
 7.  Acknowledgements
 
@@ -214,17 +216,20 @@ Internet-Draft                Common Header               September 2016
               Attribute", RFC 1997, DOI 10.17487/RFC1997, August 1996,
               <http://www.rfc-editor.org/info/rfc1997>.
 
+
+
+
+
+
+Hares & Scudder          Expires March 20, 2017                 [Page 4]
+
+Internet-Draft                Common Header               September 2016
+
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
-
-
-
-Hares & Scudder          Expires March 19, 2017                 [Page 4]
-
-Internet-Draft                Common Header               September 2016
-
 
    [RFC7606]  Chen, E., Ed., Scudder, J., Ed., Mohapatra, P., and K.
               Patel, "Revised Error Handling for BGP UPDATE Messages",
@@ -272,9 +277,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-Hares & Scudder          Expires March 19, 2017                 [Page 5]
+Hares & Scudder          Expires March 20, 2017                 [Page 5]
