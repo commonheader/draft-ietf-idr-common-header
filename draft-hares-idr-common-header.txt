@@ -196,7 +196,7 @@ Internet-Draft                Common Header               September 2016
    IETF Consensus                   0x0001-0x0555
    First come First served          0x0556-0x0AAA
    Experimental use                 0x0AAB-0x0FFF
-   Reserved                         0xF000-0xFFFF
+   Reserved                         0x1000-0xFFFF
 
 7.  Acknowledgements
 
