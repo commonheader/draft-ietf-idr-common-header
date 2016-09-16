@@ -93,22 +93,26 @@
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|            Type               |          Length               |
+|T|          Type               |          Length               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                       Global Administrator                    |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ]]></artwork></figure></t>
       <t>The fields are as shown below:
       <list style='hanging' hangIndent='10'>
-          <t hangText='     Type -'>
-              The type of community following the header. The types are to be
-              defined in companion documents. This is a two octet field.
+          <t hangText='     T - Transitive bit '>
+              Value 0: The community is transitive across ASes
+              Value 1: The community is non-transitive across ASes
           </t>
-          <t hangText='     Length -'>
+          <t hangText='     Type'>
+              The type of community following the header. The types are to be
+              defined in companion documents. This is a 15 bit field.
+          </t>
+          <t hangText='     Length'>
               The number of octets occupied by this header and the communities
               under it. This is a two octet field.
           </t>
-          <t hangText='     Global Administrator -'>
+          <t hangText='     Global Administrator'>
               This sub-field contains a 4-octet Autonomous System number
               assigned by IANA.
           </t>
@@ -177,15 +181,13 @@
         </t>
         <t>
             <figure><artwork>
-Name                       Type Value      Transitivity
-----                       ----------      ------------
-Reserved                   0x0000          n/a
-IETF Consensus             0x0001-0x02AA   Transitive
-IETF Consensus             0x02AB-0x0555   Non-Transitive
-First come First served    0x0556-0x07FF   Transitive
-First come First served    0x0800-0x0AAA   Non-Transitive
-Experimental use           0x0AAB-0x0FFF   Non-Transitive
-Reserved                   0x1000-0xFFFF   n/a
+Name                       Type Value
+----                       ----------
+Reserved                   0x0000
+IETF Consensus             0x0001-0x0555
+First come First served    0x0556-0x0AAA
+Experimental use           0x0AAB-0x0FFF
+Reserved                   0x1000-0xFFFF
 </artwork></figure>
         </t>
 
