@@ -123,9 +123,14 @@
 
     <section title="Error Handling">
         <t>
-            An implementation should walk all Common Headers and verify that
-            all of the communities fill up the path attribute length. If this
-            is not the case, the update message should be treated as withdrawn.
+            The BGP Community Common Header attribute MUST have an attribute
+            length of at least 8 octets. If this is not the case the UPDATE
+            message should be treated as a withdraw.
+        </t>
+        <t>
+            An implementation MUST walk all Common Headers and verify that all
+            of the communities fill up the path attribute length. If this is
+            not the case, the UPDATE message should be treated as withdrawn.
             Further procedures are described in <xref target="RFC7606"/>.
         </t>
     </section>

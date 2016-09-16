@@ -75,10 +75,10 @@ Table of Contents
      2.1.  BGP Community Common Header . . . . . . . . . . . . . . .   3
    3.  Error Handling  . . . . . . . . . . . . . . . . . . . . . . .   3
    4.  Security Considerations . . . . . . . . . . . . . . . . . . .   3
-   5.  Implementation status - RFC EDITOR: REMOVE BEFORE PUBLICATION   3
+   5.  Implementation status - RFC EDITOR: REMOVE BEFORE PUBLICATION   4
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
    7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   4
-   8.  Normative References  . . . . . . . . . . . . . . . . . . . .   4
+   8.  Normative References  . . . . . . . . . . . . . . . . . . . .   5
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   5
 
 1.  Introduction
@@ -144,15 +144,31 @@ Internet-Draft                Common Header               September 2016
 
 3.  Error Handling
 
-   An implementation should walk all Common Headers and verify that all
-   of the communities fill up the path attribute length.  If this is not
-   the case, the update message should be treated as withdrawn.  Further
+   The BGP Community Common Header attribute MUST have an attribute
+   length of at least 8 octets.  If this is not the case the UPDATE
+   message should be treated as a withdraw.
+
+   An implementation MUST walk all Common Headers and verify that all of
+   the communities fill up the path attribute length.  If this is not
+   the case, the UPDATE message should be treated as withdrawn.  Further
    procedures are described in [RFC7606].
 
 4.  Security Considerations
 
    Optional transitive transitive BGP attributes could unintentionally
    spread far from their origin.  XX insert further deployment.
+
+
+
+
+
+
+
+
+Hares & Scudder          Expires March 20, 2017                 [Page 3]
+
+Internet-Draft                Common Header               September 2016
+
 
 5.  Implementation status - RFC EDITOR: REMOVE BEFORE PUBLICATION
 
@@ -162,14 +178,6 @@ Internet-Draft                Common Header               September 2016
    The description of implementations in this section is intended to
    assist the IETF in its decision processes in progressing drafts to
    RFCs.  Please note that the listing of any individual implementation
-
-
-
-Hares & Scudder          Expires March 20, 2017                 [Page 3]
-
-Internet-Draft                Common Header               September 2016
-
-
    here does not imply endorsement by the IETF.  Furthermore, no effort
    has been spent to verify the information presented here that was
    supplied by IETF contributors.  This is not intended as, and must not
@@ -210,14 +218,6 @@ Internet-Draft                Common Header               September 2016
    Steenbergen, Shintaro Kojima, Juan Alcaide, Burjiz Pithawala, Saku
    Ytti, Igor Gashinsky and Job Snijders.
 
-8.  Normative References
-
-   [RFC1997]  Chandra, R., Traina, P., and T. Li, "BGP Communities
-              Attribute", RFC 1997, DOI 10.17487/RFC1997, August 1996,
-              <http://www.rfc-editor.org/info/rfc1997>.
-
-
-
 
 
 
@@ -225,6 +225,12 @@ Hares & Scudder          Expires March 20, 2017                 [Page 4]
 
 Internet-Draft                Common Header               September 2016
 
+
+8.  Normative References
+
+   [RFC1997]  Chandra, R., Traina, P., and T. Li, "BGP Communities
+              Attribute", RFC 1997, DOI 10.17487/RFC1997, August 1996,
+              <http://www.rfc-editor.org/info/rfc1997>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -253,12 +259,6 @@ Authors' Addresses
    Juniper Networks
 
    Email: jgs@juniper.net
-
-
-
-
-
-
 
 
 
